@@ -22,7 +22,7 @@
 								<th width="160">Product Name</th>
 								<th width="60">Old Price</th>
 								<th width="60">(C) Price</th>
-								<th >Size</th>
+								<th>Size</th>
 								<th width="60">Quantity</th>
 								<th>Featured?</th>
 								<th>Active?</th>
@@ -102,10 +102,10 @@
 									</td>
 									<td><?php echo $row['tcat_name']; ?><br><?php echo $row['mcat_name']; ?><br><?php echo $row['ecat_name']; ?></td>
 									<td style="margin: 10px 0;">
-    <a href="product-edit.php?id=<?php echo $row['p_id']; ?>" style="margin-right: 5px;" class="btn btn-primary btn-xs">Edit</a>
-    <a href="#" style="margin-right: 5px;" class="btn btn-danger btn-xs" data-href="product-delete.php?id=<?php echo $row['p_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Delete</a>
-    <a href="product-size-edit.php?id=<?php echo $row['p_id']; ?>" class="btn btn-warning btn-xs" style="margin-top: 5px;">Add size qty</a>
-</td>
+										<a href="product-edit.php?id=<?php echo $row['p_id']; ?>" style="margin-right: 5px;" class="btn btn-primary btn-xs">Edit</a>
+										<a href="#" style="margin-right: 5px;" class="btn btn-danger btn-xs" data-href="product-delete.php?id=<?php echo $row['p_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Delete</a>
+										<a href="size-qty.php?id=<?php echo $row['p_id']; ?>" class="btn btn-warning btn-xs" style="margin-top: 5px;">Add size qty</a>
+									</td>
 								</tr>
 							<?php
 							}
