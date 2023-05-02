@@ -124,7 +124,7 @@ This link will be active only for 24 hours.
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 copyright">
-				<?php echo $footer_copyright; ?>
+			<a href="https://logiclounge.ca/"><?php echo $footer_copyright; ?> 
 			</div>
 		</div>
 	</div>
