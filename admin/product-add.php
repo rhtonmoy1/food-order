@@ -24,15 +24,15 @@ if(isset($_POST['form1'])) {
         $error_message .= "Product name can not be empty<br>";
     }
 
-    if(empty($_POST['p_current_price'])) {
-        $valid = 0;
-        $error_message .= "Current Price can not be empty<br>";
-    }
+    // if(empty($_POST['p_current_price'])) {
+    //     $valid = 0;
+    //     $error_message .= "Current Price can not be empty<br>";
+    // }
 
-    if(empty($_POST['p_qty'])) {
-        $valid = 0;
-        $error_message .= "Quantity can not be empty<br>";
-    }
+    // if(empty($_POST['p_qty'])) {
+    //     $valid = 0;
+    //     $error_message .= "Quantity can not be empty<br>";
+    // }
 
     $path = $_FILES['p_featured_photo']['name'];
     $path_tmp = $_FILES['p_featured_photo']['tmp_name'];

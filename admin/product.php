@@ -15,23 +15,25 @@
 			<div class="box box-info">
 				<div class="box-body table-responsive">
 					<table id="example1" class="table table-bordered table-hover table-striped">
-					<thead class="thead-dark">
+						<thead class="thead-dark">
 							<tr>
 								<th width="10">#</th>
 								<th>Photo</th>
 								<th width="160">Product Name</th>
 								<th width="60">Old Price</th>
 								<th width="60">(C) Price</th>
+								<th >Size</th>
 								<th width="60">Quantity</th>
 								<th>Featured?</th>
 								<th>Active?</th>
 								<th>Category</th>
-								<th width="80">Action</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php
-							$i=0;
+
+							$i = 0;
 							$statement = $pdo->prepare("SELECT
 														
 														t1.p_id,
@@ -66,29 +68,48 @@
 							$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 							foreach ($result as $row) {
 								$i++;
-								?>
+							?>
 								<tr>
 									<td><?php echo $i; ?></td>
 									<td style="width:82px;"><img src="../assets/uploads/<?php echo $row['p_featured_photo']; ?>" alt="<?php echo $row['p_name']; ?>" style="width:80px;"></td>
 									<td><?php echo $row['p_name']; ?></td>
 									<td>$<?php echo $row['p_old_price']; ?></td>
 									<td>$<?php echo $row['p_current_price']; ?></td>
+									<td>
+										<?php
+										$size_statement = $pdo->prepare("SELECT tbl_size.size_name FROM tbl_size INNER JOIN tbl_product_size ON tbl_size.size_id = tbl_product_size.size_id WHERE tbl_product_size.p_id = ?");
+										$size_statement->execute([$row['p_id']]);
+										$size_result = $size_statement->fetchAll(PDO::FETCH_ASSOC);
+										$size_names = array_column($size_result, 'size_name');
+										echo implode(', ', $size_names);
+										?>
+									</td>
+
 									<td><?php echo $row['p_qty']; ?></td>
 									<td>
-										<?php if($row['p_is_featured'] == 1) {echo '<span class="badge badge-success" style="background-color:green;">Yes</span>';} else {echo '<span class="badge badge-success" style="background-color:red;">No</span>';} ?>
+										<?php if ($row['p_is_featured'] == 1) {
+											echo '<span class="badge badge-success" style="background-color:green;">Yes</span>';
+										} else {
+											echo '<span class="badge badge-success" style="background-color:red;">No</span>';
+										} ?>
 									</td>
 									<td>
-										<?php if($row['p_is_active'] == 1) {echo '<span class="badge badge-success" style="background-color:green;">Yes</span>';} else {echo '<span class="badge badge-danger" style="background-color:red;">No</span>';} ?>
+										<?php if ($row['p_is_active'] == 1) {
+											echo '<span class="badge badge-success" style="background-color:green;">Yes</span>';
+										} else {
+											echo '<span class="badge badge-danger" style="background-color:red;">No</span>';
+										} ?>
 									</td>
 									<td><?php echo $row['tcat_name']; ?><br><?php echo $row['mcat_name']; ?><br><?php echo $row['ecat_name']; ?></td>
-									<td>										
-										<a href="product-edit.php?id=<?php echo $row['p_id']; ?>" class="btn btn-primary btn-xs">Edit</a>
-										<a href="#" class="btn btn-danger btn-xs" data-href="product-delete.php?id=<?php echo $row['p_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Delete</a>  
-									</td>
+									<td style="margin: 10px 0;">
+    <a href="product-edit.php?id=<?php echo $row['p_id']; ?>" style="margin-right: 5px;" class="btn btn-primary btn-xs">Edit</a>
+    <a href="#" style="margin-right: 5px;" class="btn btn-danger btn-xs" data-href="product-delete.php?id=<?php echo $row['p_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Delete</a>
+    <a href="product-size-edit.php?id=<?php echo $row['p_id']; ?>" class="btn btn-warning btn-xs" style="margin-top: 5px;">Add size qty</a>
+</td>
 								</tr>
-								<?php
+							<?php
 							}
-							?>							
+							?>
 						</tbody>
 					</table>
 				</div>
@@ -99,22 +120,22 @@
 
 
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure want to delete this item?</p>
-                <p style="color:red;">Be careful! This product will be deleted from the order table, payment table, size table, color table and rating table also.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger btn-ok">Delete</a>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure want to delete this item?</p>
+				<p style="color:red;">Be careful! This product will be deleted from the order table, payment table, size table, color table and rating table also.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<a class="btn btn-danger btn-ok">Delete</a>
+			</div>
+		</div>
+	</div>
 </div>
 
 <?php require_once('footer.php'); ?>
