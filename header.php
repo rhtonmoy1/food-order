@@ -228,7 +228,7 @@ foreach ($result as $row) {
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
 
-	<script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=5993ef01e2587a001253a261&product=inline-share-buttons"></script>
+	<!-- <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=5993ef01e2587a001253a261&product=inline-share-buttons"></script> -->
 
 <?php echo $before_head; ?>
 
@@ -242,7 +242,7 @@ foreach ($result as $row) {
 </div>-->
 
 <!-- top bar -->
-<div class="top">
+<!-- <div class="top">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6 col-sm-6 col-xs-12">
@@ -273,10 +273,13 @@ foreach ($result as $row) {
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->
 
 
-<div class="header">
+<div style="padding-top: 132px;">
+<div class="navbar-fixed-top">
+
+<div class="header sticky-top">
 	<div class="container">
 		<div class="row inner">
 			<div class="col-md-4 logo">
@@ -338,74 +341,83 @@ foreach ($result as $row) {
 	</div>
 </div>
 
-<div class="nav">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12 pl_0 pr_0">
-				<div class="menu-container">
-					<div class="menu">
-						<ul>
-							<li><a href="index.php">Home</a></li>
-							
-							<?php
-							$statement = $pdo->prepare("SELECT * FROM tbl_top_category WHERE show_on_menu=1");
-							$statement->execute();
-							$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-							foreach ($result as $row) {
-								?>
-								<li><a href="product-category.php?id=<?php echo $row['tcat_id']; ?>&type=top-category"><?php echo $row['tcat_name']; ?></a>
-									<ul>
-										<?php
-										$statement1 = $pdo->prepare("SELECT * FROM tbl_mid_category WHERE tcat_id=?");
-										$statement1->execute(array($row['tcat_id']));
-										$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
-										foreach ($result1 as $row1) {
-											?>
-											<li><a href="product-category.php?id=<?php echo $row1['mcat_id']; ?>&type=mid-category"><?php echo $row1['mcat_name']; ?></a>
-												<ul>
-													<?php
-													$statement2 = $pdo->prepare("SELECT * FROM tbl_end_category WHERE mcat_id=?");
-													$statement2->execute(array($row1['mcat_id']));
-													$result2 = $statement2->fetchAll(PDO::FETCH_ASSOC);
-													foreach ($result2 as $row2) {
-														?>
-														<li><a href="product-category.php?id=<?php echo $row2['ecat_id']; ?>&type=end-category"><?php echo $row2['ecat_name']; ?></a></li>
-														<?php
-													}
-													?>
-												</ul>
-											</li>
-											<?php
-										}
-										?>
-									</ul>
-								</li>
+
+<nav class="navbar navbar-default" style="margin: 0;">
+<div class="container">
+<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed " data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false" style="color:aliceblue;">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+
+			<div class="collapse navbar-collapse" id="navbar-collapse-1">
+				<ul class="nav navbar-nav" style="background-color:#F8F8F8;">
+					<li><a href="index.php">Home</a></li>
+
+					<?php
+					$statement = $pdo->prepare("SELECT * FROM tbl_top_category WHERE show_on_menu=1");
+					$statement->execute();
+					$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+					foreach ($result as $row) {
+					?>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $row['tcat_name']; ?><span class="caret"></span></a>
+							<ul class="dropdown-menu">
 								<?php
-							}
-							?>
-
-							<?php
-							$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE id=1");
-							$statement->execute();
-							$result = $statement->fetchAll(PDO::FETCH_ASSOC);		
-							foreach ($result as $row) {
-								$about_title = $row['about_title'];
-								$faq_title = $row['faq_title'];
-								$blog_title = $row['blog_title'];
-								$contact_title = $row['contact_title'];
-								$pgallery_title = $row['pgallery_title'];
-								$vgallery_title = $row['vgallery_title'];
-							}
-							?>
-
-							<li><a href="about.php"><?php echo $about_title; ?></a></li>
-							<li><a href="faq.php"><?php echo $faq_title; ?></a></li>
-
-							<li><a href="contact.php"><?php echo $contact_title; ?></a></li>
-						</ul>
-					</div>
-				</div>
+								$statement1 = $pdo->prepare("SELECT * FROM tbl_mid_category WHERE tcat_id=?");
+								$statement1->execute(array($row['tcat_id']));
+								$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
+								foreach ($result1 as $row1) {
+								?>
+									<li class="dropdown-submenu">
+										<a href="product-category.php?id=<?php echo $row1['mcat_id']; ?>&type=mid-category"><?php echo $row1['mcat_name']; ?></a>
+										<ul class="dropdown-menu">
+											<?php
+											$statement2 = $pdo->prepare("SELECT * FROM tbl_end_category WHERE mcat_id=?");
+											$statement2->execute(array($row1['mcat_id']));
+											$result2 = $statement2->fetchAll(PDO::FETCH_ASSOC);
+											foreach ($result2 as $row2) {
+											?>
+												<li><a href="product-category.php?id=<?php echo $row2['ecat_id']; ?>&type=end-category"><?php echo $row2['ecat_name']; ?></a></li>
+											<?php
+											}
+											?>
+										</ul>
+									</li>
+								<?php
+								}
+								?>
+							</ul>
+						</li>
+					<?php
+					}
+					?>
+					<?php
+					$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE id=1");
+					$statement->execute();
+					$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+					foreach ($result as $row) {
+						$about_title = $row['about_title'];
+						$faq_title = $row['faq_title'];
+						$blog_title = $row['blog_title'];
+						$contact_title = $row['contact_title'];
+						$pgallery_title = $row['pgallery_title'];
+						$vgallery_title = $row['vgallery_title'];
+					}
+					?>
+					<li><a href="about.php"><?php echo $about_title; ?></a></li>
+					<li><a href="faq.php"><?php echo $faq_title; ?></a></li>
+					<li><a href="contact.php"><?php echo $contact_title; ?></a></li>
+				</ul>
 			</div>
 		</div>
-	</div>
+	</nav>
 </div>
+</div>
+
+</div>
+		

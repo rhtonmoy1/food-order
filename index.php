@@ -31,19 +31,21 @@ foreach ($result as $row)
 
 ?>
 
-<div id="bootstrap-touch-slider" class="carousel bs-slider fade control-round indicators-line" data-ride="carousel" data-pause="hover" data-interval="false" >
+<div id="bootstrap-touch-slider" class="carousel bs-slider fade control-round indicators-line" data-ride="carousel" data-pause="hover" data-interval="5000">
 
     <!-- Indicators -->
     <ol class="carousel-indicators">
         <?php
-        $i=0;
+        $i = 0;
         $statement = $pdo->prepare("SELECT * FROM tbl_slider");
         $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
-        foreach ($result as $row) {            
-            ?>
-            <li data-target="#bootstrap-touch-slider" data-slide-to="<?php echo $i; ?>" <?php if($i==0) {echo 'class="active"';} ?>></li>
-            <?php
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($result as $row) {
+        ?>
+            <li data-target="#bootstrap-touch-slider" data-slide-to="<?php echo $i; ?>" <?php if ($i == 0) {
+                                                                                            echo 'class="active"';
+                                                                                        } ?>></li>
+        <?php
             $i++;
         }
         ?>
@@ -53,25 +55,55 @@ foreach ($result as $row)
     <div class="carousel-inner" role="listbox">
 
         <?php
-        $i=0;
+        $i = 0;
         $statement = $pdo->prepare("SELECT * FROM tbl_slider");
         $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
-        foreach ($result as $row) {            
-            ?>
-            <div class="item <?php if($i==0) {echo 'active';} ?>" style="background-image:url(assets/uploads/<?php echo $row['photo']; ?>);">
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($result as $row) {
+        ?>
+            <div class="item <?php if ($i == 0) {
+                                    echo 'active';
+                                } ?>" style="background-image:url(assets/uploads/<?php echo $row['photo']; ?>); height: 100vh;
+                                width: 100%;
+                                background-position: center;
+                                background-repeat: no-repeat;
+                                background-size: cover;">
                 <div class="bs-slider-overlay"></div>
                 <div class="container">
                     <div class="row">
-                        <div class="slide-text <?php if($row['position'] == 'Left') {echo 'slide_style_left';} elseif($row['position'] == 'Center') {echo 'slide_style_center';} elseif($row['position'] == 'Right') {echo 'slide_style_right';} ?>">
-                            <h1 data-animation="animated <?php if($row['position'] == 'Left') {echo 'zoomInLeft';} elseif($row['position'] == 'Center') {echo 'flipInX';} elseif($row['position'] == 'Right') {echo 'zoomInRight';} ?>"><?php echo $row['heading']; ?></h1>
-                            <p data-animation="animated <?php if($row['position'] == 'Left') {echo 'fadeInLeft';} elseif($row['position'] == 'Center') {echo 'fadeInDown';} elseif($row['position'] == 'Right') {echo 'fadeInRight';} ?>"><?php echo nl2br($row['content']); ?></p>
-                            <a href="<?php echo $row['button_url']; ?>" target="_blank"  class="btn btn-primary" data-animation="animated <?php if($row['position'] == 'Left') {echo 'fadeInLeft';} elseif($row['position'] == 'Center') {echo 'fadeInDown';} elseif($row['position'] == 'Right') {echo 'fadeInRight';} ?>"><?php echo $row['button_text']; ?></a>
+                        <div class="slide-text <?php if ($row['position'] == 'Left') {
+                                                    echo 'slide_style_left';
+                                                } elseif ($row['position'] == 'Center') {
+                                                    echo 'slide_style_center';
+                                                } elseif ($row['position'] == 'Right') {
+                                                    echo 'slide_style_right';
+                                                } ?>">
+                            <h1 data-animation="animated <?php if ($row['position'] == 'Left') {
+                                                                echo 'zoomInLeft';
+                                                            } elseif ($row['position'] == 'Center') {
+                                                                echo 'flipInX';
+                                                            } elseif ($row['position'] == 'Right') {
+                                                                echo 'zoomInRight';
+                                                            } ?>"><?php echo $row['heading']; ?></h1>
+                            <p data-animation="animated <?php if ($row['position'] == 'Left') {
+                                                            echo 'fadeInLeft';
+                                                        } elseif ($row['position'] == 'Center') {
+                                                            echo 'fadeInDown';
+                                                        } elseif ($row['position'] == 'Right') {
+                                                            echo 'fadeInRight';
+                                                        } ?>"><?php echo nl2br($row['content']); ?></p>
+                            <a href="<?php echo $row['button_url']; ?>" target="_blank" class="btn btn-primary" data-animation="animated <?php if ($row['position'] == 'Left') {
+                                                                                                                                                echo 'fadeInLeft';
+                                                                                                                                            } elseif ($row['position'] == 'Center') {
+                                                                                                                                                echo 'fadeInDown';
+                                                                                                                                            } elseif ($row['position'] == 'Right') {
+                                                                                                                                                echo 'fadeInRight';
+                                                                                                                                            } ?>"><?php echo $row['button_text']; ?></a>
                         </div>
                     </div>
                 </div>
             </div>
-            <?php
+        <?php
             $i++;
         }
         ?>

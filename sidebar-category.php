@@ -16,7 +16,7 @@
                             <span data-toggle="collapse" data-parent="#menu-group-1" href="#cat-lvl1-id-<?php echo $i; ?>" class="sign"><i class="fa fa-plus"></i></span>
                             <span class="lbl"><?php echo $row['tcat_name']; ?></span>                      
                         </a>
-                        <ul class="children nav-child unstyled small collapse" id="cat-lvl1-id-<?php echo $i; ?>">
+                        <ul class="children nav-child unstyled small " id="cat-lvl1-id-<?php echo $i; ?>">
                             <?php
                             $j=0;
                             $statement1 = $pdo->prepare("SELECT * FROM tbl_mid_category WHERE tcat_id=?");
@@ -30,7 +30,7 @@
                                         <span data-toggle="collapse" data-parent="#menu-group-1" href="#cat-lvl2-id-<?php echo $i.$j; ?>" class="sign"><i class="fa fa-plus"></i></span>
                                         <span class="lbl lbl1"><?php echo $row1['mcat_name']; ?></span> 
                                     </a>
-                                    <ul class="children nav-child unstyled small collapse" id="cat-lvl2-id-<?php echo $i.$j; ?>">
+                                    <ul class="children nav-child unstyled small " id="cat-lvl2-id-<?php echo $i.$j; ?>">
                                         <?php
                                             $k=0;
                                             $statement2 = $pdo->prepare("SELECT * FROM tbl_end_category WHERE mcat_id=?");
