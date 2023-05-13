@@ -5,30 +5,34 @@ if(isset($_POST['form1'])) {
     $old_price = $_POST['old_price'];
     $current_price = $_POST['current_price'];
     $size_name = $_POST['size_name'];
+    $p_id = $_GET['id'];
 
-    $stmt = $pdo->prepare("SELECT so_price, sc_price FROM tbl_product_size WHERE size_id IN (SELECT size_id FROM tbl_size WHERE size_name = ?)");
-    $stmt->execute([$size_name]);
+    // Check if the product size already exists
+    $stmt = $pdo->prepare("SELECT * FROM tbl_product_size WHERE p_id = ? AND size_id IN (SELECT size_id FROM tbl_size WHERE size_name = ?)");
+    $stmt->execute([$p_id, $size_name]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	if(count($rows) > 0) {
-		$size_id = $rows[0]['size_id'];
-		$stmt = $pdo->prepare("SELECT size_id, so_price, sc_price FROM tbl_product_size WHERE size_id IN (SELECT size_id FROM tbl_size WHERE size_name = ?)");
-		$stmt->execute([$size_id]);
-		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	
-		if(count($rows) > 0) {
-			$so_price = $rows[0]['so_price'];
-			$sc_price = $rows[0]['sc_price'];
-			echo "SO Price: " . $so_price . "<br>";
-			echo "SC Price: " . $sc_price . "<br>";
-		} else {
-			// No matching rows found, handle error here
-		}
-	}
-	
+    if(count($rows) > 0) {
+        // Product size already exists, update the prices
+        $size_id = $rows[0]['size_id'];
+        $stmt = $pdo->prepare("UPDATE tbl_product_size SET p_old_price = ?, p_current_price = ? WHERE p_id = ? AND size_id = ?");
+        $stmt->execute([$old_price, $current_price, $p_id, $size_id]);
+        $success_message = "Size quantity updated successfully.";
+    } else {
+        // Product size does not exist, insert a new row
+        $stmt = $pdo->prepare("INSERT INTO tbl_product_size (p_id, size_id, p_old_price, p_current_price) VALUES (?, (SELECT size_id FROM tbl_size WHERE size_name = ?), ?, ?)");
+        $stmt->execute([$p_id, $size_name, $old_price, $current_price]);
+        $success_message = "Size quantity added successfully.";
+    }
 }
 
+// Fetch the product details
+$stmt = $pdo->prepare("SELECT * FROM tbl_product WHERE p_id = ?");
+$stmt->execute([$_GET['id']]);
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
 ?>
+
 
 <section class="content">
     <div class="row">

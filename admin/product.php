@@ -73,15 +73,42 @@
 									<td><?php echo $i; ?></td>
 									<td style="width:82px;"><img src="../assets/uploads/<?php echo $row['p_featured_photo']; ?>" alt="<?php echo $row['p_name']; ?>" style="width:80px;"></td>
 									<td><?php echo $row['p_name']; ?></td>
-									<td>$<?php echo $row['p_old_price']; ?></td>
-									<td>$<?php echo $row['p_current_price']; ?></td>
+									<td>
+										<?php
+										$price_statement = $pdo->prepare("SELECT p_old_price, p_current_price FROM tbl_product_size WHERE p_id = ?");
+										$price_statement->execute([$row['p_id']]);
+										$price_result = $price_statement->fetchAll(PDO::FETCH_ASSOC);
+										if (!empty($price_result)) {
+											foreach ($price_result as $price) {
+												echo "$" . $price['p_old_price'] ."<br>";
+											}
+										} else {
+											echo "$" . $row['p_old_price'];
+										}
+										?>
+									</td>
+									<td>
+										<?php
+										if (!empty($price_result)) {
+											foreach ($price_result as $price) {
+												echo "$" . $price['p_current_price'] . "<br>";
+											}
+										} else {
+											echo "$" . $row['p_current_price'];
+										}
+										?>
+									</td>
 									<td>
 										<?php
 										$size_statement = $pdo->prepare("SELECT tbl_size.size_name FROM tbl_size INNER JOIN tbl_product_size ON tbl_size.size_id = tbl_product_size.size_id WHERE tbl_product_size.p_id = ?");
 										$size_statement->execute([$row['p_id']]);
 										$size_result = $size_statement->fetchAll(PDO::FETCH_ASSOC);
-										$size_names = array_column($size_result, 'size_name');
-										echo implode(', ', $size_names);
+										if (!empty($size_result)) {
+											$size_names = array_column($size_result, 'size_name');
+											echo implode(', ', $size_names);
+										} else {
+											echo "N/A";
+										}
 										?>
 									</td>
 
@@ -109,9 +136,9 @@
 										$size_statement->execute([$row['p_id']]);
 										$size_result = $size_statement->fetchAll(PDO::FETCH_ASSOC);
 
-										if(count($size_result) > 0){
-										// Show "Add size qty" button
-										echo '<a href="size-qty.php?id='.$row['p_id'].'" class="btn btn-warning btn-xs" style="margin-top: 5px;">Add size qty</a>';
+										if (count($size_result) > 0) {
+											// Show "Add size qty" button
+											echo '<a href="size-qty.php?id=' . $row['p_id'] . '" class="btn btn-warning btn-xs" style="margin-top: 5px;">Add size qty</a>';
 										}
 										?>
 									</td>
