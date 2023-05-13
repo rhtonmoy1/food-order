@@ -104,7 +104,16 @@
 									<td style="margin: 10px 0;">
 										<a href="product-edit.php?id=<?php echo $row['p_id']; ?>" style="margin-right: 5px;" class="btn btn-primary btn-xs">Edit</a>
 										<a href="#" style="margin-right: 5px;" class="btn btn-danger btn-xs" data-href="product-delete.php?id=<?php echo $row['p_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Delete</a>
-										<a href="size-qty.php?id=<?php echo $row['p_id']; ?>" class="btn btn-warning btn-xs" style="margin-top: 5px;">Add size qty</a>
+										<?php
+										$size_statement = $pdo->prepare("SELECT tbl_size.size_name FROM tbl_size INNER JOIN tbl_product_size ON tbl_size.size_id = tbl_product_size.size_id WHERE tbl_product_size.p_id = ?");
+										$size_statement->execute([$row['p_id']]);
+										$size_result = $size_statement->fetchAll(PDO::FETCH_ASSOC);
+
+										if(count($size_result) > 0){
+										// Show "Add size qty" button
+										echo '<a href="size-qty.php?id='.$row['p_id'].'" class="btn btn-warning btn-xs" style="margin-top: 5px;">Add size qty</a>';
+										}
+										?>
 									</td>
 								</tr>
 							<?php
