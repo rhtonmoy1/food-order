@@ -150,7 +150,7 @@ foreach ($result as $row) {
 <?php endif; ?>
 
 
-<!--  -->
+<!-- Feature Product -->
 
 <?php if ($home_featured_product_on_off == 1) : ?>
     <div class="product pt_70 pb_70">
@@ -169,31 +169,80 @@ foreach ($result as $row) {
                     <div class="product-carousel">
 
                         <?php
+                        // Retrieve all featured products that are active
                         $statement = $pdo->prepare("SELECT * FROM tbl_product WHERE p_is_featured=? AND p_is_active=? LIMIT " . $total_featured_product_home);
                         $statement->execute(array(1, 1));
                         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                        // Loop through the result set
                         foreach ($result as $row) {
+                            $current_price = $row['p_current_price'];
+                            $old_price = $row['p_old_price'];
+                            $sizes = array();
+
+                            // Check if the product has any sizes
+                            $size_statement = $pdo->prepare("SELECT * FROM tbl_product_size WHERE p_id=?");
+                            $size_statement->execute(array($row['p_id']));
+                            $size_result = $size_statement->fetchAll(PDO::FETCH_ASSOC);
+
+                            if (!empty($size_result)) {
+                                // Loop through each size and get the size name and price
+                                foreach ($size_result as $size_row) {
+                                    $size_id = $size_row['size_id'];
+                                    $size_name = '';
+
+                                    // Retrieve the size name from tbl_size
+                                    $size_name_statement = $pdo->prepare("SELECT size_name FROM tbl_size WHERE size_id=?");
+                                    $size_name_statement->execute(array($size_id));
+                                    $size_name_result = $size_name_statement->fetch(PDO::FETCH_ASSOC);
+
+                                    if ($size_name_result) {
+                                        $size_name = $size_name_result['size_name'];
+                                    }
+
+                                    $sizes[] = array(
+                                        'size_id' => $size_id,
+                                        'size_name' => $size_name,
+                                        'current_price' => $size_row['p_current_price'],
+                                        'old_price' => $size_row['p_old_price']
+                                    );
+                                }
+                            }
+
+                            // Display the product information
                         ?>
                             <div class="item">
-                                <div class="thumb">
-                                    <div class="photo" style="background-image:url(assets/uploads/<?php echo $row['p_featured_photo']; ?>);"></div>
-                                    <div class="overlay"></div>
-                                </div>
-                                <div class="text">
-                                    <h3><a href="product.php?id=<?php echo $row['p_id']; ?>"><?php echo $row['p_name']; ?></a></h3>
-                                    <h4>
-                                        $<?php echo $row['p_current_price']; ?>
-                                        <?php if ($row['p_old_price'] != '') : ?>
-                                            <del>
-                                                $<?php echo $row['p_old_price']; ?>
-                                            </del>
-                                        <?php endif; ?>
-                                    </h4>
-                                    
-
-                                    <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Add to Cart</a></p>
-
-                                </div>
+                                <a href="product.php?id=<?php echo $row['p_id']; ?>">
+                                    <div class="thumb">
+                                        <div class="photo" style="background-image:url(assets/uploads/<?php echo $row['p_featured_photo']; ?>);"></div>
+                                        <div class="overlay"></div>
+                                    </div>
+                                    <div class="text">
+                                        <h3><a href="product.php?id=<?php echo $row['p_id']; ?>"><?php echo $row['p_name']; ?></a></h3>
+                                        <?php if (!empty($sizes)) { ?>
+                                            <p>
+                                                <?php foreach ($sizes as $size) { ?>
+                                                    <span><?php echo $size['size_name']; ?>:</span>
+                                                    <span><?php echo $size['current_price']; ?></span>
+                                                    <?php if ($size['old_price'] != '') { ?>
+                                                        <del><?php echo $size['old_price']; ?></del>
+                                                    <?php } ?>
+                                                    <br>
+                                                <?php } ?>
+                                            </p>
+                                        <?php } else { ?>
+                                            <h4>
+                                                $<?php echo $current_price; ?>
+                                                <?php if ($old_price != '' && $old_price != 0) : ?>
+                                                    <del>
+                                                        $<?php echo $old_price; ?>
+                                                    </del>
+                                                <?php endif; ?>
+                                            </h4>
+                                        <?php } ?>
+                                        <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Add to Cart</a></p>
+                                    </div>
+                                </a>
                             </div>
                         <?php
                         }
@@ -243,11 +292,11 @@ foreach ($result as $row) {
                                             </del>
                                         <?php endif; ?>
                                     </h4>
-                                    
-                                
-                                 
-                                        <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Add to Cart</a></p>
-                                   
+
+
+
+                                    <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Add to Cart</a></p>
+
                                 </div>
                             </div>
                         <?php
@@ -301,9 +350,9 @@ foreach ($result as $row) {
                                             </del>
                                         <?php endif; ?>
                                     </h4>
-                                    
-                                        <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Add to Cart</a></p>
-                                    
+
+                                    <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Add to Cart</a></p>
+
                                 </div>
                             </div>
                         <?php

@@ -2,6 +2,7 @@
 
 <?php
 if(isset($_POST['form1'])) {
+
     $old_price = $_POST['old_price'];
     $current_price = $_POST['current_price'];
     $size_name = $_POST['size_name'];
@@ -16,14 +17,21 @@ if(isset($_POST['form1'])) {
         // Product size already exists, update the prices
         $size_id = $rows[0]['size_id'];
         $stmt = $pdo->prepare("UPDATE tbl_product_size SET p_old_price = ?, p_current_price = ? WHERE p_id = ? AND size_id = ?");
+        // Check if old_price and current_price are 0 and set them as null
+        if($old_price == 0) $old_price = null;
+        if($current_price == 0) $current_price = null;
         $stmt->execute([$old_price, $current_price, $p_id, $size_id]);
         $success_message = "Size quantity updated successfully.";
     } else {
         // Product size does not exist, insert a new row
         $stmt = $pdo->prepare("INSERT INTO tbl_product_size (p_id, size_id, p_old_price, p_current_price) VALUES (?, (SELECT size_id FROM tbl_size WHERE size_name = ?), ?, ?)");
+        // Check if old_price and current_price are 0 and set them as null
+        if($old_price == 0) $old_price = null;
+        if($current_price == 0) $current_price = null;
         $stmt->execute([$p_id, $size_name, $old_price, $current_price]);
         $success_message = "Size quantity added successfully.";
     }
+    
 }
 
 // Fetch the product details
@@ -32,6 +40,7 @@ $stmt->execute([$_GET['id']]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
+
 
 
 <section class="content">
@@ -72,7 +81,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="old_price">Old Price:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="old_price" id="old_price" required>
+                                <input class="form-control" type="text" name="old_price" id="old_price">
                             </div>
                         </div>
                         <div class="form-group">
