@@ -19,7 +19,7 @@ foreach ($result as $row) {
 }
 ?>
 
-<div class="page-banner" style="background-image: url(assets/uploads/<?php echo $contact_banner; ?>);">
+<div class="page-banner" style="background-image: url(assets/uploads/<?php echo $contact_banner; ?>); margin-top: 133px;">
     <div class="inner">
         <h1><?php echo $contact_title; ?></h1>
     </div>
@@ -183,10 +183,10 @@ if(isset($_POST['form_contact']))
                             <strong>Phone:</strong><br>
                             <span><?php echo $contact_phone; ?></span>
                         </address>
-                        <address>
+                        <!-- <address>
                             <strong>Email:</strong><br>
                             <a href="mailto:<?php echo $contact_email; ?>"><span><?php echo $contact_email; ?></span></a>
-                        </address>
+                        </address> -->
                     </div>
                 </div>
 
