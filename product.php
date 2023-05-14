@@ -278,7 +278,7 @@ if ($success_message1 != '') {
 ?>
 
 
-<div class="page">
+<div class="page" style="padding-top: 210px;">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -474,17 +474,7 @@ if ($success_message1 != '') {
                                         ?>
                                     </p>
                                 </div>
-                                <!-- <div role="tabpanel" class="tab-pane" id="return_policy" style="margin-top: -30px;">
-                                    <p>
-                                        <?php
-                                        // if ($p_return_policy == '') {
-                                        //     echo LANG_VALUE_73;
-                                        // } else {
-                                        //     echo $p_return_policy;
-                                        // }
-                                        ?>
-                                    </p>
-                                </div> -->
+                             
 
                             </div>
                         </div>

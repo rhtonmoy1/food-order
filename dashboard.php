@@ -17,7 +17,7 @@ if(!isset($_SESSION['customer'])) {
 }
 ?>
 
-<div class="page">
+<div class="page" style="margin-top:133px;">
     <div class="container">
         <div class="row">            
             <div class="col-md-12"> 

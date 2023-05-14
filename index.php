@@ -29,7 +29,7 @@ foreach ($result as $row) {
 
 ?>
 
-<div id="bootstrap-touch-slider" class="carousel bs-slider fade control-round indicators-line" data-ride="carousel" data-pause="hover" data-interval="5000">
+<div id="bootstrap-touch-slider" class="carousel bs-slider fade control-round indicators-line" data-ride="carousel" data-pause="hover" data-interval="5000" style="margin-top: 133px;">
 
     <!-- Indicators -->
     <ol class="carousel-indicators">

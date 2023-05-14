@@ -276,7 +276,7 @@ foreach ($result as $row) {
 </div> -->
 
 
-<div style="padding-top: 132px;">
+<!-- <div style="padding-top: 132px;"> -->
 <div class="navbar-fixed-top">
 
 <div class="header sticky-top">

@@ -99,9 +99,9 @@ if(isset($_POST['form1'])) {
         							p_short_description=?,
         							p_feature=?,
         							p_condition=?,
-        							p_return_policy=?,
         							p_is_featured=?,
         							p_is_active=?,
+									is_vage=?,
         							ecat_id=?
 
         							WHERE p_id=?");
@@ -114,9 +114,9 @@ if(isset($_POST['form1'])) {
         							$_POST['p_short_description'],
         							$_POST['p_feature'],
         							$_POST['p_condition'],
-        							$_POST['p_return_policy'],
         							$_POST['p_is_featured'],
         							$_POST['p_is_active'],
+									$_POST['is_vage'],
         							$_POST['ecat_id'],
         							$_REQUEST['id']
         						));
@@ -138,9 +138,9 @@ if(isset($_POST['form1'])) {
         							p_short_description=?,
         							p_feature=?,
         							p_condition=?,
-        							p_return_policy=?,
         							p_is_featured=?,
         							p_is_active=?,
+									is_vage=?,
         							ecat_id=?
 
         							WHERE p_id=?");
@@ -154,9 +154,9 @@ if(isset($_POST['form1'])) {
         							$_POST['p_short_description'],
         							$_POST['p_feature'],
         							$_POST['p_condition'],
-        							$_POST['p_return_policy'],
         							$_POST['p_is_featured'],
         							$_POST['p_is_active'],
+									$_POST['is_vage'],
         							$_POST['ecat_id'],
         							$_REQUEST['id']
         						));
@@ -177,20 +177,7 @@ if(isset($_POST['form1'])) {
         	$statement->execute(array($_REQUEST['id']));
 		}
 
-		if(isset($_POST['color'])) {
-			
-			$statement = $pdo->prepare("DELETE FROM tbl_product_color WHERE p_id=?");
-        	$statement->execute(array($_REQUEST['id']));
-
-			foreach($_POST['color'] as $value) {
-				$statement = $pdo->prepare("INSERT INTO tbl_product_color (color_id,p_id) VALUES (?,?)");
-				$statement->execute(array($value,$_REQUEST['id']));
-			}
-		} else {
-			$statement = $pdo->prepare("DELETE FROM tbl_product_color WHERE p_id=?");
-        	$statement->execute(array($_REQUEST['id']));
-		}
-	
+		
     	$success_message = 'Product is updated successfully.';
     }
 }
@@ -236,9 +223,9 @@ foreach ($result as $row) {
 	$p_short_description = $row['p_short_description'];
 	$p_feature = $row['p_feature'];
 	$p_condition = $row['p_condition'];
-	$p_return_policy = $row['p_return_policy'];
 	$p_is_featured = $row['p_is_featured'];
 	$p_is_active = $row['p_is_active'];
+	$is_vage = $row['is_vage'];
 	$ecat_id = $row['ecat_id'];
 }
 
@@ -264,12 +251,7 @@ foreach ($result as $row) {
 	$size_id[] = $row['size_id'];
 }
 
-$statement = $pdo->prepare("SELECT * FROM tbl_product_color WHERE p_id=?");
-$statement->execute(array($_REQUEST['id']));
-$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
-foreach ($result as $row) {
-	$color_id[] = $row['color_id'];
-}
+
 ?>
 
 
@@ -401,31 +383,7 @@ foreach ($result as $row) {
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Select Color</label>
-							<div class="col-sm-4">
-								<select name="color[]" class="form-control select2" multiple="multiple">
-									<?php
-									$is_select = '';
-									$statement = $pdo->prepare("SELECT * FROM tbl_color ORDER BY color_id ASC");
-									$statement->execute();
-									$result = $statement->fetchAll(PDO::FETCH_ASSOC);			
-									foreach ($result as $row) {
-										if(isset($color_id)) {
-											if(in_array($row['color_id'],$color_id)) {
-												$is_select = 'selected';
-											} else {
-												$is_select = '';
-											}
-										}
-										?>
-										<option value="<?php echo $row['color_id']; ?>" <?php echo $is_select; ?>><?php echo $row['color_name']; ?></option>
-										<?php
-									}
-									?>
-								</select>
-							</div>
-						</div>
+						
 						<div class="form-group">
 							<label for="" class="col-sm-3 control-label">Existing Featured Photo</label>
 							<div class="col-sm-4" style="padding-top:4px;">
@@ -487,15 +445,9 @@ foreach ($result as $row) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Conditions</label>
+							<label for="" class="col-sm-3 control-label">Calorie Information</label>
 							<div class="col-sm-8">
 								<textarea name="p_condition" class="form-control" cols="30" rows="10" id="editor4"><?php echo $p_condition; ?></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Return Policy</label>
-							<div class="col-sm-8">
-								<textarea name="p_return_policy" class="form-control" cols="30" rows="10" id="editor5"><?php echo $p_return_policy; ?></textarea>
 							</div>
 						</div>
 						<div class="form-group">
@@ -513,6 +465,15 @@ foreach ($result as $row) {
 								<select name="p_is_active" class="form-control" style="width:auto;">
 									<option value="0" <?php if($p_is_active == '0'){echo 'selected';} ?>>No</option>
 									<option value="1" <?php if($p_is_active == '1'){echo 'selected';} ?>>Yes</option>
+								</select> 
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Is Vage?</label>
+							<div class="col-sm-8">
+								<select name="is_vage" class="form-control" style="width:auto;">
+									<option value="0" <?php if($is_vage == '0'){echo 'selected';} ?>>No</option>
+									<option value="1" <?php if($is_vage == '1'){echo 'selected';} ?>>Yes</option>
 								</select> 
 							</div>
 						</div>

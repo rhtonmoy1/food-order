@@ -112,7 +112,6 @@ if(isset($_POST['form1'])) {
 										p_short_description,
 										p_feature,
 										p_condition,
-										p_return_policy,
 										p_total_view,
 										p_is_featured,
 										p_is_active,
@@ -128,7 +127,6 @@ if(isset($_POST['form1'])) {
 										$_POST['p_short_description'],
 										$_POST['p_feature'],
 										$_POST['p_condition'],
-										$_POST['p_return_policy'],
 										0,
 										$_POST['p_is_featured'],
 										$_POST['p_is_active'],
@@ -144,12 +142,7 @@ if(isset($_POST['form1'])) {
 			}
 		}
 
-		if(isset($_POST['color'])) {
-			foreach($_POST['color'] as $value) {
-				$statement = $pdo->prepare("INSERT INTO tbl_product_color (color_id,p_id) VALUES (?,?)");
-				$statement->execute(array($value,$ai_id));
-			}
-		}
+		
 	
     	$success_message = 'Product is added successfully.';
     }
@@ -266,23 +259,7 @@ if(isset($_POST['form1'])) {
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Select Color</label>
-							<div class="col-sm-4">
-								<select name="color[]" class="form-control select2" multiple="multiple">
-									<?php
-									$statement = $pdo->prepare("SELECT * FROM tbl_color ORDER BY color_id ASC");
-									$statement->execute();
-									$result = $statement->fetchAll(PDO::FETCH_ASSOC);			
-									foreach ($result as $row) {
-										?>
-										<option value="<?php echo $row['color_id']; ?>"><?php echo $row['color_name']; ?></option>
-										<?php
-									}
-									?>
-								</select>
-							</div>
-						</div>
+				
 						<div class="form-group">
 							<label for="" class="col-sm-3 control-label">Featured Photo <span>*</span></label>
 							<div class="col-sm-4" style="padding-top:4px;">
@@ -328,17 +305,12 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Conditions</label>
+							<label for="" class="col-sm-3 control-label">Calorie Information</label>
 							<div class="col-sm-8">
 								<textarea name="p_condition" class="form-control" cols="30" rows="10" id="editor4"></textarea>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Return Policy</label>
-							<div class="col-sm-8">
-								<textarea name="p_return_policy" class="form-control" cols="30" rows="10" id="editor5"></textarea>
-							</div>
-						</div>
+						
 						<div class="form-group">
 							<label for="" class="col-sm-3 control-label">Is Featured?</label>
 							<div class="col-sm-8">
